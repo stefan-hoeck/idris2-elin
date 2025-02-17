@@ -43,3 +43,7 @@ interface MErr f => ELift1 (0 s : Type) f | f where
 export %inline
 ELift1 s f => Lift1 s (f es) where
   lift1 act = elift1 $ \t => let v # t := act t in R v t
+
+public export
+0 EOI : (f : List Type -> Type -> Type) -> Type
+EOI = ELift1 World
