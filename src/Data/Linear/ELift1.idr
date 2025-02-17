@@ -46,5 +46,5 @@ ELift1 s f => Lift1 s (f es) where
 
 ||| Convenience alias for `ELift1 World`
 public export
-0 EOI : (f : List Type -> Type -> Type) -> Type
-EOI = ELift1 World
+0 EIO1 : (f : List Type -> Type -> Type) -> Type
+EIO1 = ELift1 World
