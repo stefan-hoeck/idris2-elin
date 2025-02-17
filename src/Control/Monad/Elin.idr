@@ -1,6 +1,6 @@
 module Control.Monad.Elin
 
-import public Control.Monad.HErr
+import public Control.Monad.MErr
 import public Data.Linear.ELift1
 
 %default total

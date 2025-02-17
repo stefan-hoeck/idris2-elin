@@ -1,7 +1,7 @@
 module Data.Linear.ELift1
 
 import public Data.Linear.Token
-import public Control.Monad.HErr
+import public Control.Monad.MErr
 
 %default total
 
