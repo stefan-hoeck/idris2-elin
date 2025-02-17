@@ -1,0 +1,14 @@
+package elin
+
+authors    = "stefan-hoeck"
+brief      = "Stateful linear computations with error handling"
+version    = 0.7.0
+sourcedir  = "src"
+depends    = base         >= 0.7.0
+           , quantifiers-extra
+           , ref1
+
+modules = Control.Monad.HErr
+        , Control.Monad.Elin
+        , Data.Linear.ELift1
+

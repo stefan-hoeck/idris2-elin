@@ -1,0 +1,4 @@
+[custom.all.elin]
+type   = "local"
+path   = "."
+ipkg   = "elin.ipkg"
