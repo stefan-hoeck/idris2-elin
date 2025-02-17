@@ -8,7 +8,7 @@ depends    = base         >= 0.7.0
            , quantifiers-extra
            , ref1
 
-modules = Control.Monad.HErr
+modules = Control.Monad.MErr
         , Control.Monad.Elin
         , Data.Linear.ELift1
 

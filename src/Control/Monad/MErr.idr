@@ -1,4 +1,4 @@
-module Control.Monad.HErr
+module Control.Monad.MErr
 
 import public Data.List.Quantifiers.Extra
 
