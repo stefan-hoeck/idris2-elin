@@ -19,6 +19,14 @@ public export
 0 E1 : Type -> List Type -> Type -> Type
 E1 s es a = (1 t : T1 s) -> ERes s es a
 
+||| Replaces all errors with `neutral`, running an `E1` as an `F1`.
+export %inline
+toF1 : Monoid a => E1 s es a -> F1 s a
+toF1 act t =
+  case act t of
+    E _ t => neutral # t
+    R v t => v # t
+
 export
 mapPRes : (a -> b) -> (1 _ : ERes e es a) -> ERes e es b
 mapPRes f (E x t) = E x t
