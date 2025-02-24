@@ -21,10 +21,12 @@ bindImpl (E g) f =
 
 export %inline
 MErr (Elin s) where
-  fail x    = E (E x)
-  succeed v = E (R v)
-  bind      = bindImpl
-  attempt x = E $ \t => pattempt (run x t)
+  fail x          = E (E x)
+  succeed v       = E (R v)
+  bind            = bindImpl
+  attempt x       = E $ \t => pattempt (run x t)
+  mapImpl f act   = E $ \t => mapERes f (act.run t)
+  appImpl ff fv   = bindImpl ff (`mapImpl` fv)
 
 ||| Dummy implementation as `Elin` has no concept of self-cancelation.
 ||| Still, this is useful to get access to the `bracket` combinators.
