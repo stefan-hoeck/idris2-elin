@@ -21,12 +21,8 @@ interface MErr (0 m : List Type -> Type -> Type) where
   succeed : a -> m es a
   attempt : m es a -> m fs (Result es a)
   bind    : m es a -> (a -> m es b) -> m es b
-
   mapImpl : (a -> b) -> m es a -> m es b
-  mapImpl f v = bind v (succeed . f)
-
   appImpl : m es (a -> b) -> m es a -> m es b
-  appImpl ff fv = bind ff (`mapImpl` fv)
 
 public export %inline
 MErr m => Functor (m es) where

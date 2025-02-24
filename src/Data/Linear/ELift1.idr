@@ -28,9 +28,9 @@ e1ToF1 act t =
     R v t => v # t
 
 export
-mapPRes : (a -> b) -> (1 _ : ERes e es a) -> ERes e es b
-mapPRes f (E x t) = E x t
-mapPRes f (R v t) = R (f v) t
+mapERes : (a -> b) -> (1 _ : ERes e es a) -> ERes e es b
+mapERes f (E x t) = E x t
+mapERes f (R v t) = R (f v) t
 
 export
 pattempt : (1 r : ERes e es a) -> ERes e fs (Result es a)
