@@ -1,6 +1,6 @@
 module Control.Monad.Elin
 
-import public Control.Monad.MErr
+import public Control.Monad.MCancel
 import public Data.Linear.ELift1
 
 %default total
@@ -25,6 +25,16 @@ MErr (Elin s) where
   succeed v = E (R v)
   bind      = bindImpl
   attempt x = E $ \t => pattempt (run x t)
+
+||| Dummy implementation as `Elin` has no concept of self-cancelation.
+||| Still, this is useful to get access to the `bracket` combinators.
+||| Semantically, an `Elin` computation acts as if wrapped in a global
+||| `uncancelable` wrapper.
+export %inline
+MCancel (Elin s) where
+  canceled          = pure ()
+  uncancelable body = body id
+  onCancel fa _     = fa
 
 export %inline
 ELift1 s (Elin s) where
