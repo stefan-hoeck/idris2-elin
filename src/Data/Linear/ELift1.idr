@@ -27,6 +27,11 @@ e1ToF1 act t =
     E _ t => neutral # t
     R v t => v # t
 
+||| Lifts a linear computation into an `E1 s a`.
+export %inline
+f1ToE1 : F1 s a -> E1 s es a
+f1ToE1 act t = let v # t := act t in R v t
+
 export
 mapERes : (a -> b) -> (1 _ : ERes e es a) -> ERes e es b
 mapERes f (E x t) = E x t
@@ -50,7 +55,7 @@ interface MErr f => ELift1 (0 s : Type) f | f where
 
 export %inline
 ELift1 s f => Lift1 s (f es) where
-  lift1 act = elift1 $ \t => let v # t := act t in R v t
+  lift1 act = elift1 (f1ToE1 act)
 
 ||| Convenience alias for `ELift1 World`
 public export
