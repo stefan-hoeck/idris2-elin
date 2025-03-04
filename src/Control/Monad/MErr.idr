@@ -96,3 +96,14 @@ bindResult act f = attempt act >>= f
 export %inline
 onError : MErr m => m es a -> (HSum es -> m [] ()) -> m es a
 onError act f = handleErrors (\x => weakenErrors (f x) >> fail x) act
+
+||| Handles the given error by replacing it with the provided value.
+|||
+||| All other errors will be unaffected.
+export
+ifError : MErr m => Has e es => Eq e => (err : e) -> Lazy a -> m es a -> m es a
+ifError err v =
+  handleErrors $ \x => case project e x of
+    Nothing => fail x
+    Just y  => if err == y then pure v else fail x
+
