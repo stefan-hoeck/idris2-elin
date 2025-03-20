@@ -62,6 +62,17 @@ export
 handleErrors : MErr m => (HSum es -> m fs a) -> m es a -> m fs a
 handleErrors f act = attempt act >>= either f pure
 
+||| Tries to extract errors of a single type from a computation that
+||| can fail wrapping it in a `Left`. Other errors will be rethrown.
+export
+catch : MErr m => (0 e : Type) -> Has e es => m es a -> m es (Either e a)
+catch e m =
+  attempt m >>= \case
+    Right v   => pure $ Right v
+    Left errs => case project e errs of
+      Nothing  => fail errs
+      Just err => pure $ Left err
+
 export %inline
 mapErrors : MErr m => (HSum es -> HSum fs) -> m es a -> m fs a
 mapErrors f = handleErrors (fail . f)
@@ -73,10 +84,6 @@ weakenErrors = handleErrors absurd
 export %inline
 dropErrs : MErr m => m es () -> m [] ()
 dropErrs = handleErrors (const $ succeed ())
-
-export %inline
-liftErrors : MErr m => m es a -> m fs (Result es a)
-liftErrors = handleErrors (succeed . Left) . map Right
 
 export %inline
 liftError : MErr m => m [e] a -> m fs (Either e a)
@@ -106,4 +113,3 @@ ifError err v =
   handleErrors $ \x => case project e x of
     Nothing => fail x
     Just y  => if err == y then pure v else fail x
-
