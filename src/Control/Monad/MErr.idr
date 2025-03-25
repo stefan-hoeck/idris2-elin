@@ -73,6 +73,20 @@ catch e m =
       Nothing  => fail errs
       Just err => pure $ Left err
 
+||| Tries to extract errors of a single type from a computation that
+||| can fail wrapping it in a `Left`. Other errors will be rethrown.
+|||
+||| Unlike `catch`, this will decompose the list of possible errors,
+||| so errors can be handled one type at a time.
+export
+extractErr : MErr m => (0 e : Type) -> (p : Has e es) => m es a -> m (es - e) (Either e a)
+extractErr e m =
+  attempt {fs = es - e} m >>= \case
+    Right v   => pure $ Right v
+    Left errs => case decomp @{p} errs of
+      Left x   => fail x
+      Right x  => pure $ Left x
+
 export %inline
 mapErrors : MErr m => (HSum es -> HSum fs) -> m es a -> m fs a
 mapErrors f = handleErrors (fail . f)
