@@ -175,6 +175,18 @@ parameters {0    f  : List Type -> Type -> Type}
   guarantee : f es a -> f [] () -> f es a
   guarantee act = guaranteeCase act . const
 
+  ||| Guarantees to run the given cleanup hook in case a fiber
+  ||| has been canceled or failed with an error.
+  |||
+  ||| See `guaranteeCase` for additional information.
+  export
+  onAbort : f es a -> (cleanup : f [] ()) -> f es a
+  onAbort as h =
+    guaranteeCase as $ \case
+      Canceled => h
+      Error _  => h
+      _        => pure ()
+
   ||| A pattern for safely interacting with effectful lifecycles.
   |||
   ||| If `acquire` completes successfully, `use` is called. If `use` succeeds, fails, or is
