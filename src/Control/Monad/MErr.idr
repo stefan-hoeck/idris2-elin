@@ -91,6 +91,14 @@ export %inline
 mapErrors : MErr m => (HSum es -> HSum fs) -> m es a -> m fs a
 mapErrors f = handleErrors (fail . f)
 
+widen_ : All (`Elem` es) fs => HSum fs -> HSum es
+widen_ @{_::_} (Here v)  = inject v
+widen_ @{_::_} (There v) = widen_ v
+
+export %inline
+widenErrors : MErr m => All (`Elem` es) fs => m fs a -> m es a
+widenErrors = mapErrors widen_
+
 export %inline
 weakenErrors : MErr m => m [] a -> m fs a
 weakenErrors = handleErrors absurd
