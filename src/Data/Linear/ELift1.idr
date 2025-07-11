@@ -56,6 +56,10 @@ export %inline
 throw1 : Has e es => e -> E1 s es a
 throw1 x t = E (inject x) t
 
+export %inline
+fail1 : e -> E1 s [e] a
+fail1 = throw1
+
 ||| An interface for lifting stateful, linear computation into
 ||| a monad with the potential of failure.
 public export
