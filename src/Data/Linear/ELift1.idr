@@ -47,6 +47,11 @@ toResult : (1 r : ERes s es a) -> R1 s (Result es a)
 toResult (E x t) = Left x # t
 toResult (R v t) = Right v # t
 
+export
+toEither : (1 r : ERes s [e] a) -> R1 s (Either e a)
+toEither (E (Here x) t) = Left x # t
+toEither (R v t)        = Right v # t
+
 export %inline
 throw1 : Has e es => e -> E1 s es a
 throw1 x t = E (inject x) t
