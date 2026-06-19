@@ -74,3 +74,32 @@ ELift1 s f => Lift1 s (f es) where
 public export
 0 EIO1 : (f : List Type -> Type -> Type) -> Type
 EIO1 = ELift1 World
+
+export %inline
+liftInject1 : Has e es => ELift1 s f => E1 s [e] a -> f es a
+liftInject1 f =
+  elift1 $ \t => case f t of
+    E (Here x) t => E (inject x) t
+    R x t        => R x t
+
+export %inline
+resultToE1 : F1 s (Result es a) -> E1 s es a
+resultToE1 f t =
+  case f t of
+    Left  x # t => E x t
+    Right x # t => R x t
+
+export %inline
+eitherToE1 : Has e es => F1 s (Either e a) -> E1 s es a
+eitherToE1 f t =
+  case f t of
+    Left  x # t => E (inject x) t
+    Right x # t => R x t
+
+export %inline
+eliftResult : ELift1 s f => F1 s (Result es a) -> f es a
+eliftResult f = elift1 (resultToE1 f)
+
+export %inline
+eliftEither : Has e es => ELift1 s f => F1 s (Either e a) -> f es a
+eliftEither f = elift1 (eitherToE1 f)
