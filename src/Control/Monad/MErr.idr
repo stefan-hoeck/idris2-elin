@@ -91,6 +91,10 @@ export %inline
 mapErrors : MErr m => (HSum es -> HSum fs) -> m es a -> m fs a
 mapErrors f = handleErrors (fail . f)
 
+export %inline
+mapErr : MErr m => (h : Has e es) => (e -> f) -> m es a -> m (Replaced es h f) a
+mapErr fun = mapErrors (update fun)
+
 widen_ : All (`Elem` es) fs => HSum fs -> HSum es
 widen_ @{_::_} (Here v)  = inject v
 widen_ @{_::_} (There v) = widen_ v
