@@ -83,18 +83,22 @@ liftInject1 f =
     R x t        => R x t
 
 export %inline
+resultToERes : Result es a -> E1 s es a
+resultToERes (Left x)  t = E x t
+resultToERes (Right x) t = R x t
+
+export %inline
+eitherToERes : Has e es => Either e a -> E1 s es a
+eitherToERes (Left x)  t = E (inject x) t
+eitherToERes (Right x) t = R x t
+
+export %inline
 resultToE1 : F1 s (Result es a) -> E1 s es a
-resultToE1 f t =
-  case f t of
-    Left  x # t => E x t
-    Right x # t => R x t
+resultToE1 f t = let r # t := f t in resultToERes r t
 
 export %inline
 eitherToE1 : Has e es => F1 s (Either e a) -> E1 s es a
-eitherToE1 f t =
-  case f t of
-    Left  x # t => E (inject x) t
-    Right x # t => R x t
+eitherToE1 f t = let r # t := f t in eitherToERes r t
 
 export %inline
 eliftResult : ELift1 s f => F1 s (Result es a) -> f es a
