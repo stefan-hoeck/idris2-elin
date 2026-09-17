@@ -19,6 +19,11 @@ public export
 0 E1 : Type -> List Type -> Type -> Type
 E1 s es a = (1 t : T1 s) -> ERes s es a
 
+||| Alias for `E1 s es ()`
+public export
+0 E1' : Type -> List Type -> Type
+E1' s es = E1 s es ()
+
 ||| Replaces all errors with `neutral`, running an `E1` as an `F1`.
 export %inline
 e1ToF1 : Monoid a => E1 s es a -> F1 s a

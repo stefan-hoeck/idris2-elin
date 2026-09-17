@@ -13,4 +13,5 @@ modules = Control.Monad.MCancel
         , Control.Monad.Elin
         , Control.Monad.Resource
         , Data.Linear.ELift1
+        , Syntax.E1
 
